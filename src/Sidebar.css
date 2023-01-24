@@ -1,0 +1,62 @@
+.sidebar {
+  /* % of the whole app */
+  flex: 0.35;
+  /* Inside the sidebar */
+  display: flex;
+  flex-direction: column;
+}
+
+.sidebar__header {
+  padding: 20px;
+  border-right: 1px solid lightgray;
+  display: flex;
+  justify-content: space-between;
+}
+
+.sidebar__headerRight {
+  min-width: 10vw;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* Every material ui icon on the right  */
+.sidebar__headerRight > .MuiSvgIcon-root {
+  margin-right: 2vw;
+  /* To overwrite the MUI styles */
+  font-size: 24px !important;
+}
+
+.sidebar__search {
+  height: 39px;
+  padding: 10px;
+  background-color: #f6f6f6;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar__searchContainer {
+  width: 100%;
+  height: 35px;
+  background-color: white;
+  border-radius: 20px;
+  display: flex;
+  align-items: center;
+}
+
+.sidebar__searchContainer > input {
+  border: none;
+  margin-left: 10px;
+  outline: none;
+}
+
+.sidebar__searchContainer > .MuiSvgIcon-root {
+  padding: 10px;
+  color: gray;
+}
+
+.sidebar__chats {
+  flex: 1;
+  background-color: white;
+  overflow-y: scroll;
+}
