@@ -11,10 +11,13 @@ import SidebarChat from "./SidebarChat";
 import db from "./firebase";
 import { getDocs, collection } from "./firebase";
 import { Outlet } from "react-router-dom";
+import { useStateValue } from "./StateProvider";
 
 const Sidebar = () => {
   /* Rooms for chat */
   const [rooms, setRooms] = useState([]);
+  /* Reducer in the context */
+  const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
     getRooms();
@@ -38,7 +41,7 @@ const Sidebar = () => {
     <>
       <div className="sidebar">
         <div className="sidebar__header">
-          <Avatar />
+          <Avatar src={user?.photoURL} />
           <div className="sidebar__headerRight">
             <IconButton>
               <DonutLarge />

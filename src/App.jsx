@@ -7,11 +7,12 @@ import {
   Route,
   RouterProvider,
 } from "react-router-dom";
+import Login from "./Login";
+import { useStateValue } from "./StateProvider";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/" element={<h1>Home Screen</h1>} />
       <Route path="/app" element={<Sidebar />}>
         <Route path="/app/rooms/:roomid" element={<Chat />} />
       </Route>
@@ -20,13 +21,18 @@ const router = createBrowserRouter(
 );
 
 function App() {
+  const [{ user }, dispatch] = useStateValue();
+
   return (
     // BEM naming convention
     <div className="app">
-      <div className="app__body">
-        {/* Router */}
-        <RouterProvider router={router} />
-      </div>
+      {!user ? (
+        <Login />
+      ) : (
+        <div className="app__body">
+          <RouterProvider router={router} />
+        </div>
+      )}
     </div>
   );
 }
