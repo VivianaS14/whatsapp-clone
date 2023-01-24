@@ -7,16 +7,27 @@ import {
 } from "@mui/icons-material";
 import { Avatar, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
+import { useParams } from "react-router-dom";
 import "./Chat.css";
+import db from "./firebase";
+import { doc, getDoc } from "firebase/firestore/lite";
 
 const Chat = () => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
+  const { roomid } = useParams();
+  const [roomName, setRoomName] = useState("");
 
   useEffect(() => {
     /* Generate random avatars everytime to render */
     setSeed(Math.floor(Math.random() * 5000));
-  }, []);
+    getRoomName();
+  }, [roomid]);
+
+  const getRoomName = async () => {
+    const docSnap = await getDoc(doc(db, "rooms", roomid));
+    setRoomName(docSnap.data().name);
+  };
 
   const sendMessage = (e) => {
     e.preventDefault();
@@ -29,7 +40,7 @@ const Chat = () => {
       <div className="chat__header">
         <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
         <div className="chat__headerInfo">
-          <h3>Room Name</h3>
+          <h3>{roomName}</h3>
           <p>Last seen at ...</p>
         </div>
         <div className="chat__headerRight">

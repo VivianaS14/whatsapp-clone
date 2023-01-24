@@ -1,5 +1,5 @@
 import { initializeApp } from 'firebase/app';
-import { getFirestore, collection, getDocs, addDoc } from 'firebase/firestore/lite';
+import { getFirestore, collection, getDoc, getDocs, addDoc } from 'firebase/firestore/lite';
 import { getAuth, GoogleAuthProvider } from "firebase/auth";
 
 // For Firebase JS SDK v7.20.0 and later, measurementId is optional
@@ -23,5 +23,5 @@ const auth = getAuth();
 const provider = new GoogleAuthProvider();
 
 // export stuff we need
-export { auth, provider, getDocs, collection, addDoc };
+export { auth, provider, getDoc, getDocs, collection, addDoc };
 export default db;
