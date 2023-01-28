@@ -36,7 +36,6 @@ const Chat = () => {
     let messages = await getDocs(collection(db, "rooms", roomid, "messages"));
     let order = messages.docs.sort((a, b) => a.timestamp - b.timestamp);
     setMessages(order.map((doc) => doc.data()));
-    console.log(messages);
   };
 
   const sendMessage = (e) => {
