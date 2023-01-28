@@ -17,7 +17,7 @@ const SidebarChat = ({ addNewChat, id, name }) => {
         setMessages(snapshot.docs.map((doc) => doc.data()));
       });
     }
-  }, []);
+  }, [id]);
 
   useEffect(() => {
     /* Generate random avatars everytime to render */
