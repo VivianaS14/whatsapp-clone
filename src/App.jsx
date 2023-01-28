@@ -13,8 +13,8 @@ import { useStateValue } from "./StateProvider";
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
-      <Route path="/app" element={<Sidebar />}>
-        <Route path="/app/rooms/:roomid" element={<Chat />} />
+      <Route path="/" element={<Sidebar />}>
+        <Route path="/rooms/:roomid" element={<Chat />} />
       </Route>
     </>
   )

@@ -10,23 +10,33 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Chat.css";
 import db from "./firebase";
-import { doc, getDoc } from "firebase/firestore/lite";
+import { doc, getDoc, getDocs, collection } from "firebase/firestore/lite";
+import { query, orderBy } from "firebase/firestore";
 
 const Chat = () => {
   const [seed, setSeed] = useState("");
   const [input, setInput] = useState("");
   const { roomid } = useParams();
   const [roomName, setRoomName] = useState("");
+  const [messages, setMessages] = useState([]);
 
   useEffect(() => {
     /* Generate random avatars everytime to render */
     setSeed(Math.floor(Math.random() * 5000));
     getRoomName();
+    getRoomMessages();
   }, [roomid]);
 
   const getRoomName = async () => {
     const docSnap = await getDoc(doc(db, "rooms", roomid));
     setRoomName(docSnap.data().name);
+  };
+
+  const getRoomMessages = async () => {
+    let messages = await getDocs(collection(db, "rooms", roomid, "messages"));
+    let order = messages.docs.sort((a, b) => a.timestamp - b.timestamp);
+    setMessages(order.map((doc) => doc.data()));
+    console.log(messages);
   };
 
   const sendMessage = (e) => {
@@ -56,11 +66,15 @@ const Chat = () => {
         </div>
       </div>
       <div className="chat__body">
-        <p className={`chat__message ${true && "chat__reciever"}`}>
-          <span className="chat__name">Lolita Perez</span>
-          Hey guys!
-          <span className="chat__timestamp">3:02 pm</span>
-        </p>
+        {messages.map((message) => (
+          <p className={`chat__message ${true && "chat__reciever"}`}>
+            <span className="chat__name">{message.name}</span>
+            {message.message}
+            <span className="chat__timestamp">
+              {new Date(message.timestamp?.toDate()).toUTCString()}
+            </span>
+          </p>
+        ))}
       </div>
       <div className="chat__footer">
         <InsertEmoticon />

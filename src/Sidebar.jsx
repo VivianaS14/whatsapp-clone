@@ -41,7 +41,7 @@ const Sidebar = () => {
     <>
       <div className="sidebar">
         <div className="sidebar__header">
-          <Avatar src={user?.photoURL} />
+          {user.photoURL && <Avatar src={user.photoURL} />}
           <div className="sidebar__headerRight">
             <IconButton>
               <DonutLarge />
