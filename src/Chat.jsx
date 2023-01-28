@@ -17,9 +17,10 @@ import {
   collection,
   addDoc,
   serverTimestamp,
-  orderBy,
   query,
-} from "firebase/firestore/lite";
+  orderBy,
+  onSnapshot,
+} from "firebase/firestore";
 import { useStateValue } from "./StateProvider";
 
 const Chat = () => {
@@ -33,22 +34,19 @@ const Chat = () => {
   useEffect(() => {
     /* Generate random avatars everytime to render */
     setSeed(Math.floor(Math.random() * 5000));
-    getRoomName();
-    getRoomMessages();
-  }, [roomid, input]);
+    /* Getting the room name */
+    const roomname = onSnapshot(doc(db, "rooms", roomid), (snapshot) => {
+      setRoomName(snapshot.data().name);
+    });
+    /* Getting messages based on a room and order by ascending */
+    const messagesRef = collection(db, "rooms", roomid, "messages");
+    const qu = query(messagesRef, orderBy("timestamp", "asc"));
+    const messages = onSnapshot(qu, (snapshot) => {
+      setMessages(snapshot.docs.map((doc) => doc.data()));
+    });
 
-  const getRoomName = async () => {
-    const docSnap = await getDoc(doc(db, "rooms", roomid));
-    setRoomName(docSnap.data().name);
-  };
-
-  const getRoomMessages = async () => {
-    let messages = await getDocs(collection(db, "rooms", roomid, "messages"));
-    //let order = messages.docs.sort((a, b) => a.timestamp - b.timestamp);
-    //let order = query(messages, orderBy("timestamp", "asc"));
-    //console.log(order);
-    setMessages(messages.docs.map((doc) => doc.data()));
-  };
+    return roomname, messages;
+  }, [roomid]);
 
   const sendMessage = async (e) => {
     e.preventDefault();
@@ -69,7 +67,12 @@ const Chat = () => {
         <Avatar src={`https://avatars.dicebear.com/api/human/${seed}.svg`} />
         <div className="chat__headerInfo">
           <h3>{roomName}</h3>
-          <p>Last seen at ...</p>
+          <p>
+            Last seen at{" "}
+            {new Date(
+              messages[messages.length - 1]?.timestamp?.toDate()
+            ).toUTCString()}
+          </p>
         </div>
         <div className="chat__headerRight">
           <IconButton>

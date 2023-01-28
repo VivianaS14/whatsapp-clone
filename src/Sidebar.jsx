@@ -12,6 +12,7 @@ import db from "./firebase";
 import { getDocs, collection } from "./firebase";
 import { Outlet } from "react-router-dom";
 import { useStateValue } from "./StateProvider";
+import { onSnapshot } from "firebase/firestore";
 
 const Sidebar = () => {
   /* Rooms for chat */
@@ -20,22 +21,17 @@ const Sidebar = () => {
   const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
-    getRooms();
-  }, [rooms]);
-
-  const getRooms = async () => {
-    const roomsDocs = await getDocs(collection(db, "rooms"));
-    setRooms(
-      roomsDocs.docs.map((doc) => ({
-        id: doc.id,
-        data: doc.data(),
-      }))
-    );
+    const rooms = onSnapshot(collection(db, "rooms"), (snapshot) => {
+      setRooms(
+        snapshot.docs.map((doc) => ({
+          id: doc.id,
+          data: doc.data(),
+        }))
+      );
+    });
     /* Optimization tip -> clenUp function, whenever the component sort of unmounts and you always detach the real time listener after is done using it */
-    return () => {
-      roomsDocs();
-    };
-  };
+    return rooms;
+  }, [rooms]);
 
   return (
     <>
