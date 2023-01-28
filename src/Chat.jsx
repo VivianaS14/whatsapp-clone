@@ -10,8 +10,17 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Chat.css";
 import db from "./firebase";
-import { doc, getDoc, getDocs, collection } from "firebase/firestore/lite";
-import { query, orderBy } from "firebase/firestore";
+import {
+  doc,
+  getDoc,
+  getDocs,
+  collection,
+  addDoc,
+  serverTimestamp,
+  orderBy,
+  query,
+} from "firebase/firestore/lite";
+import { useStateValue } from "./StateProvider";
 
 const Chat = () => {
   const [seed, setSeed] = useState("");
@@ -19,13 +28,14 @@ const Chat = () => {
   const { roomid } = useParams();
   const [roomName, setRoomName] = useState("");
   const [messages, setMessages] = useState([]);
+  const [{ user }, dispatch] = useStateValue();
 
   useEffect(() => {
     /* Generate random avatars everytime to render */
     setSeed(Math.floor(Math.random() * 5000));
     getRoomName();
     getRoomMessages();
-  }, [roomid]);
+  }, [roomid, input]);
 
   const getRoomName = async () => {
     const docSnap = await getDoc(doc(db, "rooms", roomid));
@@ -34,13 +44,22 @@ const Chat = () => {
 
   const getRoomMessages = async () => {
     let messages = await getDocs(collection(db, "rooms", roomid, "messages"));
-    let order = messages.docs.sort((a, b) => a.timestamp - b.timestamp);
-    setMessages(order.map((doc) => doc.data()));
+    //let order = messages.docs.sort((a, b) => a.timestamp - b.timestamp);
+    //let order = query(messages, orderBy("timestamp", "asc"));
+    //console.log(order);
+    setMessages(messages.docs.map((doc) => doc.data()));
   };
 
-  const sendMessage = (e) => {
+  const sendMessage = async (e) => {
     e.preventDefault();
     console.log("You typed >>> ", input);
+
+    await addDoc(collection(db, "rooms", roomid, "messages"), {
+      message: input,
+      name: user.displayName,
+      timestamp: serverTimestamp(),
+    });
+
     setInput("");
   };
 
@@ -66,7 +85,12 @@ const Chat = () => {
       </div>
       <div className="chat__body">
         {messages.map((message) => (
-          <p className={`chat__message ${true && "chat__reciever"}`}>
+          <p
+            key={message.id}
+            className={`chat__message ${
+              message.name === user.displayName && "chat__reciever"
+            }`}
+          >
             <span className="chat__name">{message.name}</span>
             {message.message}
             <span className="chat__timestamp">
