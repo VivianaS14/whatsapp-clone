@@ -30,7 +30,7 @@ const Sidebar = () => {
       );
     });
     /* Optimization tip -> clenUp function, whenever the component sort of unmounts and you always detach the real time listener after is done using it */
-    return rooms;
+    //return rooms;
   }, [rooms]);
 
   return (
