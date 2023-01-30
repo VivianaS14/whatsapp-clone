@@ -1,10 +1,10 @@
 import { Button } from "@mui/material";
 import React from "react";
 import "./Login.css";
-import { auth, provider } from "./firebase";
+import { auth, provider } from "../api/firebase";
 import { signInWithPopup } from "firebase/auth";
-import { useStateValue } from "./StateProvider";
-import { actionTypes } from "./reducer";
+import { useStateValue } from "../StateProvider";
+import { actionTypes } from "../reducer";
 
 const Login = () => {
   const [{}, dispatch] = useStateValue();

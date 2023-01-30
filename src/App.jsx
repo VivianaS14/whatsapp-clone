@@ -1,13 +1,13 @@
 import "./App.css";
-import Sidebar from "./Sidebar";
-import Chat from "./Chat";
+import Sidebar from "./containers/Sidebar";
+import Chat from "./pages/Chat";
 import {
   createBrowserRouter,
   createRoutesFromElements,
   Route,
   RouterProvider,
 } from "react-router-dom";
-import Login from "./Login";
+import Login from "./layout/Login";
 import { useStateValue } from "./StateProvider";
 
 const router = createBrowserRouter(

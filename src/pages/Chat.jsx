@@ -9,11 +9,9 @@ import { Avatar, IconButton } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import "./Chat.css";
-import db from "./firebase";
+import db from "../api/firebase";
 import {
   doc,
-  getDoc,
-  getDocs,
   collection,
   addDoc,
   serverTimestamp,
@@ -21,7 +19,7 @@ import {
   orderBy,
   onSnapshot,
 } from "firebase/firestore";
-import { useStateValue } from "./StateProvider";
+import { useStateValue } from "../StateProvider";
 
 const Chat = () => {
   const [seed, setSeed] = useState("");

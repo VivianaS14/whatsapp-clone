@@ -1,8 +1,8 @@
 import { Avatar } from "@mui/material";
 import React, { useEffect, useState } from "react";
 import "./SidebarChat.css";
-import db from "./firebase";
-import { addDoc } from "./firebase";
+import db from "../api/firebase";
+import { addDoc } from "../api/firebase";
 import { query, orderBy, collection, onSnapshot } from "firebase/firestore";
 import { Link } from "react-router-dom";
 

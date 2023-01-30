@@ -7,11 +7,11 @@ import {
   MoreVert,
   SearchOutlined,
 } from "@mui/icons-material";
-import SidebarChat from "./SidebarChat";
-import db from "./firebase";
-import { getDocs, collection } from "./firebase";
+import SidebarChat from "../components/SidebarChat";
+import db from "../api/firebase";
+import { getDocs, collection } from "../api/firebase";
 import { Outlet } from "react-router-dom";
-import { useStateValue } from "./StateProvider";
+import { useStateValue } from "../StateProvider";
 import { onSnapshot } from "firebase/firestore";
 
 const Sidebar = () => {
