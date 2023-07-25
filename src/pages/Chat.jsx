@@ -48,7 +48,6 @@ const Chat = () => {
 
   const sendMessage = async (e) => {
     e.preventDefault();
-    console.log("You typed >>> ", input);
 
     await addDoc(collection(db, "rooms", roomid, "messages"), {
       message: input,
